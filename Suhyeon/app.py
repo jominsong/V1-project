@@ -9,8 +9,6 @@ st.title("🛍️ 리뷰 요약 및 감성 분석기( G마켓 )")
 api_key = st.text_input("🔑 OpenAI API 키를 입력하세요", type="password")
 
 goodscode = st.text_input("📦 상품 코드를 입력하세요")
-max_pages = st.slider("최대 페이지 수", 1, 10, 3)
-max_reviews = st.slider("최대 리뷰 수", 1, 100, 30)
 
 if st.button("리뷰 가져오기 및 분석 시작"):
     if not api_key:
@@ -19,7 +17,7 @@ if st.button("리뷰 가져오기 및 분석 시작"):
         st.error("상품 URL을 입력해주세요.")
     else:
         with st.spinner("리뷰를 가져오는 중..."):
-            reviews = get_reviews(goodscode, max_pages, max_reviews)
+            reviews = get_reviews(goodscode)
 
         if not reviews:
             st.warning("리뷰를 가져오지 못했습니다. 코드가 올바른지 확인해주세요.")
