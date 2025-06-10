@@ -8,3 +8,5 @@ openai
 python-dotenv
 selenium
 webdriver-manager
+googletrans==4.0.0-rc1
+concurrent.futures==3.0.5
