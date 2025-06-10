@@ -1,0 +1,63 @@
+import requests
+from googletrans import Translator
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# 번역기
+translator = Translator()
+
+# 번역 함수
+def translate(text):
+    return translator.translate(text, src='ko', dest='en').text
+
+# AI 감지 함수
+def detect_ai_score(text, api_key):
+    response = requests.post(
+        "https://api.sapling.ai/api/v1/aidetect",
+        json={
+            "key": api_key,
+            "text": text
+        }
+    )
+    result = response.json()
+    return round(result["score"] * 100, 2) if "score" in result else None
+
+# 전체 처리 함수
+def process_review(korean_text, api_key):
+    try:
+        english_text = translate(korean_text)
+        score = detect_ai_score(english_text, api_key)
+        return {
+            "original_korean": korean_text,
+            "translated_english": english_text,
+            "ai_score_percent": score
+        }
+    except Exception as e:
+        return {
+            "original_korean": korean_text,
+            "error": str(e)
+        }
+
+# 실행부
+if __name__ == "__main__":
+    api_key = "ZH5PGVIA3OYKV95LSU6TFNYOP2XMHO8Q"  # 본인 키로 변경
+
+    # 테스트용 리뷰 리스트 (50~100개까지 확장 가능)
+    review_list = [
+        ""
+        # ... 최대 100개까지
+    ]
+
+    results = []
+
+    print("🔄 병렬 처리 중...")
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_review = {executor.submit(process_review, review, api_key): review for review in review_list}
+        for future in as_completed(future_to_review):
+            result = future.result()
+            results.append(result)
+            print(f"✅ 완료: {result.get('original_korean')} → {result.get('ai_score_percent', '실패')}%")
+
+    # 전체 결과 출력
+    print("\n📊 전체 요약:")
+    for r in results:
+        print(f"{r['original_korean']} → {r.get('ai_score_percent', '에러')}%")
