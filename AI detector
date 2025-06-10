@@ -27,10 +27,10 @@ def process_review(korean_text, api_key):
         score = detect_ai_score(english_text, api_key)
         
         # 30% 이하인 경우에는 결과 리스트에 저장하지 않음
-        if score is not None and score <= 30:
+        if score is not None and score <= 30: #수치 조정 가능
             return None  # 30% 이하인 경우 None을 반환하여 리스트에 추가되지 않게 함
         
-        # 한글 텍스트만 저장
+        # 한글 텍스트만 저장하여 openai한테 바로 전달 가능
         return {
             "original_korean": korean_text
         }
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     # 테스트용 리뷰 리스트 (50~100개까지 확장 가능)
     
-    review_list = []  # 여기에 최대 100개 리뷰 입력 가능
+    review_list = []  # 여기에 최대 100개 리뷰 입력 가능 클롤링 한 리스트를 여기에 연동하면 작동함
 
     results = []
 
