@@ -26,8 +26,8 @@ def process_review(korean_text, api_key):
         # AI 감지 점수 계산
         score = detect_ai_score(english_text, api_key)
         
-        # 30% 이하인 경우에는 결과 리스트에 저장하지 않음
-        if score is not None and score <= 30: #수치 조정 가능
+        # 70% 이상인 경우에는 결과 리스트에 저장하지 않음
+        if score is not None and score >= 70: #수치 조정 가능
             return None  # 30% 이하인 경우 None을 반환하여 리스트에 추가되지 않게 함
         
         # 한글 텍스트만 저장하여 openai한테 바로 전달 가능
