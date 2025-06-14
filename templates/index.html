@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰 분석기</title>
+</head>
+<body>
+    <h2>리뷰 요약 및 감정 분석기</h2>
+    <form method="POST">
+        상품 URL: <input type="text" name="url" size="60" required><br><br>
+        OpenAI API 키: <input type="text" name="api_key" size="60" required><br><br>
+        Sapling API 키: <input type="text" name="sapling_key" size="60" required><br><br>
+        <input type="submit" value="리뷰 분석하기">
+    </form>
+
+    {% if filter_info %}
+    <hr>
+    <p><b>{{ filter_info }}</b></p>
+    {% endif %}
+
+    {% if result and not result.error %}
+        {% if result.summary %}
+        <h3>리뷰 요약 결과</h3>
+        <p>{{ result.summary }}</p>
+        {% endif %}
+
+        {% if result.sentiment %}
+        <h3>감정 분석 결과</h3>
+        <ul>
+            <li>긍정: {{ result.sentiment.positive_count }}개</li>
+            <li>부정: {{ result.sentiment.negative_count }}개</li>
+            <li>중립: {{ result.sentiment.neutral_count }}개</li>
+            <li><b>총평:</b> {{ result.sentiment.overall_analysis }}</li>
+        </ul>
+        {% endif %}
+        
+        {% if result.trust_score %}
+        <h3>신뢰도 점수</h3>
+        <p><b>{{ result.trust_score.score }} / 100점</b></p>
+        <p><b>판단 근거:</b> {{ result.trust_score.reason }}</p>
+        {% endif %}
+    
+    {% elif result and result.error %}
+        <h3 style="color: red;">분석 실패</h3>
+        <p>{{ result.error }}</p>
+    {% endif %}
+
+
+    {% if reviews %}
+    <h3>분석에 사용된 리뷰 (AI 의심 리뷰 제외)</h3>
+    <ul>
+    {% for r in reviews %}
+        <li>{{ r }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
