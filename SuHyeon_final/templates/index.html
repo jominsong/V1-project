@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰 분석기</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div id="main-container" class="url-container">
+        <div class="url-box">
+            <h2 class="url-title">상품 리뷰를 분석할<br>URL을 입력하세요</h2>
+            <input type="text" id="url_input" class="url-input" placeholder="상품 URL (쿠팡, G마켓)">
+            <input type="text" id="openai_key_input" class="url-input" placeholder="OpenAI API 키">
+            <input type="text" id="sapling_key_input" class="url-input" placeholder="Sapling AI API 키">
+            <button class="analyze-btn" onclick="startAnalysis()">분석하기</button>
+            <div class="supported-sites">지원 사이트 : 쿠팡, G마켓</div>
+        </div>
+    </div>
+
+    <div id="loading-container" class="loading-container" style="display: none;">
+        <div class="loading-box">
+            <div class="loader"></div>
+            <div class="loading-title">리뷰 정보를 분석 중입니다</div>
+            <div class="loading-explain">
+                리뷰를 크롤링하고 AI로 분석 중입니다.<br>잠시만 기다려주세요!
+            </div>
+            <div class="progress-bar-outer">
+                <div class="progress-bar-inner" id="bar"></div>
+            </div>
+            <div id="percent" style="color:#a09adf;font-size:0.96rem;">0%</div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
